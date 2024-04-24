@@ -1,0 +1,67 @@
+openapi: "3.0.0"
+info:
+  title: "OpenAPI спецификация учебного проекта №3 @T1Academy"
+  description: "module MetricsConsumer"
+  version: "0.0.1"
+servers:
+  - url: http://localhost:8079/
+    description: "Dev server"
+paths:
+  /metrics:
+    get:
+      summary: "Метод получения всех метрик"
+      operationId: "getAll"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ResponseEntity"
+  
+  /metrics/{id}:
+    get:
+      summary: "Метод получения метрики по идентификатору"
+      operationId: "getById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: Идентификатор метрики
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+components:
+  schemas:
+    Metrics:
+      type: "object"
+      required:
+      - id
+      - data
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: "123"
+        data:
+          type: "string"
+          example: "321654"
+    HttpHeaders:
+      type: "object"
+      properties: { }
+    ResponseEntity:
+      type: "object"
+      properties:
+        body: 
+          $ref: "#/components/schemas/Metrics"
+        headers:
+          $ref: "#/components/schemas/HttpHeaders"
