@@ -25,6 +25,7 @@ public class MetricsProducerApplication {
     @EventListener(ApplicationReadyEvent.class)
     @Scheduled(fixedRate = 30000)
     public void test() {
+        metrics.getMetric();
         log.info("Free memory: {}", metrics.getMetric());
     }
 }

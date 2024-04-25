@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Setter
 @Getter
 @ToString
@@ -13,9 +12,11 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "metrics")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Metrics {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
-    private String data;
+    private String time;
+    private int data;
 }

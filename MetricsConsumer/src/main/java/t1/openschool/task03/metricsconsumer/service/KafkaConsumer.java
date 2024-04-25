@@ -1,27 +1,26 @@
 package t1.openschool.task03.metricsconsumer.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import t1.openschool.task03.metricsconsumer.model.Metrics;
+import t1.openschool.task03.metricsconsumer.model.MetricsMapper;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class KafkaConsumer {
-    @Autowired
-    MetricsConsumerServiceImpl metricsConsumerService;
+    private final MetricsConsumerServiceImpl metricsConsumerService;
+    private final MetricsMapper mapper;
+
+    public KafkaConsumer(MetricsConsumerServiceImpl metricsConsumerService, MetricsMapper mapper) {
+        this.metricsConsumerService = metricsConsumerService;
+        this.mapper = mapper;
+    }
 
     @KafkaListener(id = "metricsGroup", topics = "metrics-topic")
-    public void listen(List<String> in) {
+    public void listen(Map<String, Integer> in) {
         log.info("Message received: {}", in);
-
-        List<Metrics> receiveMetrics = in.stream()
-                .map(mtr -> Metrics.builder().data(mtr).build()).toList();
-        metricsConsumerService.saveMessage(receiveMetrics);
+        metricsConsumerService.saveMessage(mapper.mapper(in));
     }
 }
